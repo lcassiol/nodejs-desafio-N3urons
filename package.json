@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-desafio-N3urons",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lcassiol/nodejs-desafio-N3urons.git",
+  "author": "Cassio C. <LccassioL@gmail.com>",
+  "license": "MIT",
+  "script": {
+    "build": "tsc",
+    "dev:server": "ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/express": "^4.17.7",
+    "ts-node-dev": "^1.0.0-pre.60",
+    "typescript": "^4.0.2"
+  }
+}
