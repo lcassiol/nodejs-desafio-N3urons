@@ -1,9 +1,13 @@
-import express, { Request, Response, NextFunction } from 'express';
+import * as express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
+import 'reflect-metadata';
 
-import cors from 'cors';
+import * as cors from 'cors';
 import routes from './routes';
 import AppError from './errors/AppError';
+
+import './database';
 
 const app = express();
 
