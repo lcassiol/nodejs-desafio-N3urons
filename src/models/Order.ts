@@ -40,14 +40,14 @@ class Order {
   subsidiary: Subsidiary;
 
   @Column()
-  client_id: number;
+  client_id: string;
 
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client: Client;
 
   @Column()
-  user_id: number;
+  user_id: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
