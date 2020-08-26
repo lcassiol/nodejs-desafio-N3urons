@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Seed3OrderStatus1598459212854 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    queryRunner.manager
+    await queryRunner.manager
       .createQueryBuilder()
       .insert()
       .into('order_status')
@@ -11,7 +11,7 @@ export class Seed3OrderStatus1598459212854 implements MigrationInterface {
       })
       .execute();
 
-    queryRunner.manager
+    await queryRunner.manager
       .createQueryBuilder()
       .insert()
       .into('order_status')
@@ -20,7 +20,7 @@ export class Seed3OrderStatus1598459212854 implements MigrationInterface {
       })
       .execute();
 
-    queryRunner.manager
+    await queryRunner.manager
       .createQueryBuilder()
       .insert()
       .into('order_status')
@@ -29,7 +29,7 @@ export class Seed3OrderStatus1598459212854 implements MigrationInterface {
       })
       .execute();
 
-    queryRunner.manager
+    await queryRunner.manager
       .createQueryBuilder()
       .insert()
       .into('order_status')

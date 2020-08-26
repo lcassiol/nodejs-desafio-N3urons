@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
 import OrderProducts from '../models/OrderProducts';
+import OrderStatus from '../models/OrderStatus';
 
 interface IRequest {
   status_id: number;
@@ -32,6 +33,13 @@ class CreateOrderService {
   }: IRequest): Promise<Order> {
     const orderRepository = getRepository(Order);
     const orderProductsRepository = getRepository(OrderProducts);
+    const orderStatusRepository = getRepository(OrderStatus);
+
+    const orderStatusProcessing = await orderStatusRepository.findOne({
+      where: {
+        name: 'Processing',
+      },
+    });
 
     //check if subsidiary exists
     //check if status exists
@@ -44,7 +52,7 @@ class CreateOrderService {
       discount,
       subtotal,
       subsidiary_id,
-      status_id,
+      status_id: orderStatusProcessing.id,
       user_id,
     });
 
