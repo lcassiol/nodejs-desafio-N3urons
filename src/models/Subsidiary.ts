@@ -27,4 +27,4 @@ class Subsidiary {
   updated_at: Date;
 }
 
-export default Filial;
+export default Subsidiary;
