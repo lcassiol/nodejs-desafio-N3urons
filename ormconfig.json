@@ -2,7 +2,7 @@
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
-  "username": "sellpoint",
+  "username": "selluser",
   "password": "123321",
   "database": "sellpoint",
   "migrations": ["./src/database/migrations/*.ts"],

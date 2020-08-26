@@ -21,6 +21,7 @@ export class CreateClients1598402391437 implements MigrationInterface {
           {
             name: 'email',
             type: 'varchar',
+            isUnique: true,
             isNullable: false,
           },
           {
