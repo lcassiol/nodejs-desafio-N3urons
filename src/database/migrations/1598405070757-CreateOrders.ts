@@ -20,7 +20,7 @@ export class CreateOrders1598405070757 implements MigrationInterface {
           },
           {
             name: 'client_id',
-            type: 'int',
+            type: 'varchar',
             isNullable: false,
           },
           {
