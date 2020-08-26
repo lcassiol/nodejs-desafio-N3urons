@@ -2,37 +2,27 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
+  TableColumn,
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateUsers1598402396276 implements MigrationInterface {
+export class CreateProductCategory1598405003702 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: 'product_category',
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'int',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
+            generationStrategy: 'increment',
+            isGenerated: true,
           },
           {
-            name: 'login',
-            type: 'varchar',
-            isUnique: true,
-            isNullable: false,
-          },
-          {
-            name: 'password',
+            name: 'name',
             type: 'varchar',
             isNullable: false,
-          },
-          {
-            name: 'client_id',
-            type: 'string',
-            isNullable: true,
           },
           {
             name: 'created_at',
@@ -48,13 +38,22 @@ export class CreateUsers1598402396276 implements MigrationInterface {
       }),
     );
 
+    await queryRunner.addColumn(
+      'products',
+      new TableColumn({
+        name: 'category_id',
+        type: 'int',
+        isNullable: false,
+      }),
+    );
+
     await queryRunner.createForeignKey(
-      'users',
+      'products',
       new TableForeignKey({
-        name: 'user_client',
-        columnNames: ['client_id'],
+        name: 'product_categories',
+        columnNames: ['category_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'clients',
+        referencedTableName: 'product_category',
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
       }),
@@ -62,7 +61,8 @@ export class CreateUsers1598402396276 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('users', 'user_client');
-    await queryRunner.dropTable('users');
+    await queryRunner.dropForeignKey('products', 'product_categories');
+    await queryRunner.dropColumn('products', 'category_id');
+    await queryRunner.dropTable('product_category');
   }
 }
