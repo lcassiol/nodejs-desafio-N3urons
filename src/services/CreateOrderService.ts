@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
+import OrderProducts from '../models/OrderProducts';
 
 interface IRequest {
   status_id: number;
@@ -11,6 +12,11 @@ interface IRequest {
   user_id: string;
   client_id: string;
   discount: number;
+  products: {
+    product_id: number;
+    quantity: number;
+    total: number;
+  }[];
 }
 
 class CreateOrderService {
@@ -22,8 +28,10 @@ class CreateOrderService {
     user_id,
     client_id,
     discount,
+    products,
   }: IRequest): Promise<Order> {
     const orderRepository = getRepository(Order);
+    const orderProductsRepository = getRepository(OrderProducts);
 
     //check if subsidiary exists
     //check if status exists
@@ -41,6 +49,23 @@ class CreateOrderService {
     });
 
     await orderRepository.save(newOrder);
+
+    //insert on table order_products the products
+    const orderProductsArray: OrderProducts[] = [];
+    products.forEach(product => {
+      const orderProduct = orderProductsRepository.create({
+        order_id: newOrder.id,
+        product_id: product.product_id,
+        quantity: product.quantity,
+        total: product.total,
+      });
+
+      orderProductsArray.push(orderProduct);
+    });
+
+    if (orderProductsArray.length > 0) {
+      await orderProductsRepository.save(orderProductsArray);
+    }
 
     return newOrder;
   }

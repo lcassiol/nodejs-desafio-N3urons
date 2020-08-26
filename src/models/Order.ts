@@ -4,12 +4,14 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 import Subsidiary from './Subsidiary';
 import Client from './Client';
 import OrderStatus from './OrderStatus';
 import User from './User';
+import OrderProducts from './OrderProducts';
 
 @Entity('orders')
 class Order {
@@ -28,7 +30,7 @@ class Order {
   @Column()
   status_id: number;
 
-  @ManyToOne(() => OrderStatus)
+  @ManyToOne(() => OrderStatus, { eager: true })
   @JoinColumn({ name: 'status_id' })
   status: OrderStatus;
 
@@ -52,6 +54,9 @@ class Order {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => OrderProducts, orderProduct => orderProduct.order)
+  order_products: OrderProducts[];
 }
 
 export default Order;
