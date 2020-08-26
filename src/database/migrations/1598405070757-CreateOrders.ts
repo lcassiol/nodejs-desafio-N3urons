@@ -29,6 +29,11 @@ export class CreateOrders1598405070757 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'user_id',
+            type: 'uuid',
+            isNullable: false,
+          },
+          {
             name: 'subtotal',
             type: 'decimal',
             isNullable: false,
@@ -80,11 +85,24 @@ export class CreateOrders1598405070757 implements MigrationInterface {
         onUpdate: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'orders',
+      new TableForeignKey({
+        name: 'order_user',
+        columnNames: ['user_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'users',
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('orders', 'order_filial');
     await queryRunner.dropForeignKey('orders', 'order_client');
+    await queryRunner.dropForeignKey('orders', 'order_user');
     await queryRunner.dropTable('orders');
   }
 }
