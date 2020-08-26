@@ -19,7 +19,7 @@ export class CreateStock1598405056059 implements MigrationInterface {
             isGenerated: true,
           },
           {
-            name: 'filial_id',
+            name: 'subsidiary_id',
             type: 'int',
             isNullable: false,
           },
@@ -50,10 +50,10 @@ export class CreateStock1598405056059 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'stock',
       new TableForeignKey({
-        name: 'stock_filial',
-        columnNames: ['filial_id'],
+        name: 'stock_subsidiary',
+        columnNames: ['subsidiary_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'filial',
+        referencedTableName: 'Subsidiary',
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
       }),
@@ -73,7 +73,7 @@ export class CreateStock1598405056059 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('stock', 'stock_filial');
+    await queryRunner.dropForeignKey('stock', 'stock_subsidiary');
     await queryRunner.dropForeignKey('stock', 'stock_product');
     await queryRunner.dropTable('stock');
   }

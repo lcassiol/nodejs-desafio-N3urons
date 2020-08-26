@@ -19,7 +19,7 @@ export class CreateOrders1598405070757 implements MigrationInterface {
             isGenerated: true,
           },
           {
-            name: 'filial_id',
+            name: 'subsidiary_id',
             type: 'int',
             isNullable: false,
           },
@@ -65,10 +65,10 @@ export class CreateOrders1598405070757 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'orders',
       new TableForeignKey({
-        name: 'order_filial',
-        columnNames: ['filial_id'],
+        name: 'order_subsidiary',
+        columnNames: ['subsidiary_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'filial',
+        referencedTableName: 'Subsidiary',
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
       }),
@@ -100,7 +100,7 @@ export class CreateOrders1598405070757 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('orders', 'order_filial');
+    await queryRunner.dropForeignKey('orders', 'order_subsidiary');
     await queryRunner.dropForeignKey('orders', 'order_client');
     await queryRunner.dropForeignKey('orders', 'order_user');
     await queryRunner.dropTable('orders');

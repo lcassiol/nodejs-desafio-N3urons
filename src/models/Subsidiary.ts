@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('users')
-class Filial {
+@Entity('subsidiary')
+class Subsidiary {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
