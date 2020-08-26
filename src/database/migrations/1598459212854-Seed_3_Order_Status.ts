@@ -16,6 +16,15 @@ export class Seed3OrderStatus1598459212854 implements MigrationInterface {
       .insert()
       .into('order_status')
       .values({
+        name: 'Waiting Payment',
+      })
+      .execute();
+
+    queryRunner.manager
+      .createQueryBuilder()
+      .insert()
+      .into('order_status')
+      .values({
         name: 'Finished',
       })
       .execute();
@@ -36,6 +45,13 @@ export class Seed3OrderStatus1598459212854 implements MigrationInterface {
       .delete()
       .from('order_status')
       .where({ name: 'Processing' })
+      .execute();
+
+    queryRunner.manager
+      .createQueryBuilder()
+      .delete()
+      .from('order_status')
+      .where({ name: 'Waiting Payment' })
       .execute();
 
     queryRunner.manager
