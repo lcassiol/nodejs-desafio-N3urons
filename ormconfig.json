@@ -12,5 +12,5 @@
     "migrationsDir": "./src/database/migrations"
   },
   "logging": true,
-  "synchronize": true
+  "synchronize": false
 }

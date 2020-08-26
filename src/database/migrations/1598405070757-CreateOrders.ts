@@ -1,4 +1,9 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm';
 
 export class CreateOrders1598405070757 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -20,7 +25,7 @@ export class CreateOrders1598405070757 implements MigrationInterface {
           },
           {
             name: 'client_id',
-            type: 'varchar',
+            type: 'uuid',
             isNullable: false,
           },
           {
@@ -51,9 +56,35 @@ export class CreateOrders1598405070757 implements MigrationInterface {
         ],
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'orders',
+      new TableForeignKey({
+        name: 'order_filial',
+        columnNames: ['filial_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'filial',
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'orders',
+      new TableForeignKey({
+        name: 'order_client',
+        columnNames: ['client_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'clients',
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKey('orders', 'order_filial');
+    await queryRunner.dropForeignKey('orders', 'order_client');
     await queryRunner.dropTable('orders');
   }
 }

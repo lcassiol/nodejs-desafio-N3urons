@@ -31,7 +31,7 @@ export class CreateUsers1598402396276 implements MigrationInterface {
           },
           {
             name: 'client_id',
-            type: 'varchar',
+            type: 'uuid',
             isNullable: true,
           },
           {
