@@ -9,6 +9,7 @@ import {
 import Subsidiary from './Subsidiary';
 import Client from './Client';
 import OrderStatus from './OrderStatus';
+import User from './User';
 
 @Entity('orders')
 class Order {
@@ -44,6 +45,13 @@ class Order {
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client: Client;
+
+  @Column()
+  user_id: number;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
 
 export default Order;
