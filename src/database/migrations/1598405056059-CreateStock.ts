@@ -53,7 +53,7 @@ export class CreateStock1598405056059 implements MigrationInterface {
         name: 'stock_subsidiary',
         columnNames: ['subsidiary_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Subsidiary',
+        referencedTableName: 'subsidiary',
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
       }),

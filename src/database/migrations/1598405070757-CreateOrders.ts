@@ -68,7 +68,7 @@ export class CreateOrders1598405070757 implements MigrationInterface {
         name: 'order_subsidiary',
         columnNames: ['subsidiary_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Subsidiary',
+        referencedTableName: 'subsidiary',
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
       }),
