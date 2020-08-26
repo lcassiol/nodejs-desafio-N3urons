@@ -10,7 +10,7 @@ export class Seed1Users1598451129273 implements MigrationInterface {
       .insert()
       .into('users')
       .values({
-        login: 'vendedor1',
+        login: 'seller1',
         name: 'Bender',
         password: passwordHash,
       })
@@ -22,7 +22,7 @@ export class Seed1Users1598451129273 implements MigrationInterface {
       .createQueryBuilder()
       .delete()
       .from('users')
-      .where({ login: 'vendedor1' })
+      .where({ login: 'seller1' })
       .execute();
   }
 }
