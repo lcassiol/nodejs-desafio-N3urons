@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import GetOrdersByUserService from '../services/GetOrdersByUserService';
 import ChangeOrderStatusService from '../services/ChangeOrderStatusService';
+import CreateOrderService from '../services/CreateOrderService';
 
 const ordersRouter = Router();
 
@@ -10,6 +11,30 @@ ordersRouter.get('/', async (request, response) => {
 
   const orders = await getOrderByUser.execute({
     user_id,
+  });
+
+  return response.json(orders);
+});
+
+ordersRouter.post('/', async (request, response) => {
+  const user_id = request.user.id;
+  const {
+    client_id,
+    discount,
+    products,
+    subsidiary_id,
+    subtotal,
+  } = request.body;
+
+  const createOrderService = new CreateOrderService();
+
+  const orders = await createOrderService.execute({
+    user_id,
+    client_id,
+    discount,
+    products,
+    subsidiary_id,
+    subtotal,
   });
 
   return response.json(orders);

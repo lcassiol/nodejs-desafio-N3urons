@@ -6,10 +6,8 @@ import OrderProducts from '../models/OrderProducts';
 import OrderStatus from '../models/OrderStatus';
 
 interface IRequest {
-  status_id: number;
   subsidiary_id: number;
   subtotal: number;
-  total: number;
   user_id: string;
   client_id: string;
   discount: number;
@@ -22,10 +20,8 @@ interface IRequest {
 
 class CreateOrderService {
   public async execute({
-    status_id,
     subsidiary_id,
     subtotal,
-    total,
     user_id,
     client_id,
     discount,
@@ -48,7 +44,7 @@ class CreateOrderService {
 
     const newOrder = orderRepository.create({
       client_id,
-      total,
+      total: subtotal - discount,
       discount,
       subtotal,
       subsidiary_id,
