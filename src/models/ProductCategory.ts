@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('order_status')
+@Entity('product_category')
 class ProductCategory {
   @PrimaryGeneratedColumn('increment')
   id: number;
