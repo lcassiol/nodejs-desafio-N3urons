@@ -8,22 +8,18 @@ export default async function ensureSellerUser(
   response: Response,
   next: NextFunction,
 ): Promise<void> {
-  try {
-    const { id } = request.user;
-    const userRepository = getRepository(User);
+  const { id } = request.user;
+  const userRepository = getRepository(User);
 
-    const user = await userRepository.findOne({
-      where: {
-        id,
-      },
-    });
+  const user = await userRepository.findOne({
+    where: {
+      id,
+    },
+  });
 
-    if (!user.isSeller) {
-      throw new AppError('Only Seller user can do this action');
-    }
-
-    return next();
-  } catch {
-    throw new AppError('Invalid token', 400);
+  if (!user.isSeller) {
+    throw new AppError('Only Seller user can do this action');
   }
+
+  return next();
 }
