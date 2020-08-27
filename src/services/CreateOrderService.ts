@@ -52,6 +52,24 @@ class CreateOrderService {
 
     console.log('Product in stock');
     console.log(productInStock);
+    const updatedStock: Stock[] = [];
+
+    productInStock.forEach(productStock => {
+      const productIndex = products.findIndex(
+        product => product.product_id === productStock.product_id,
+      );
+
+      if (productStock.quantity >= products[productIndex].quantity) {
+        productStock.quantity -= products[productIndex].quantity;
+        updatedStock.push(productStock);
+      } else {
+        throw new AppError('Product ' + productStock.id + ' Stock unavailable');
+      }
+    });
+
+    // updated stock
+    await stockRepository.save(updatedStock);
+
     //check cliente id
     //calc total, discount, subtotal
 
@@ -80,9 +98,7 @@ class CreateOrderService {
       orderProductsArray.push(orderProduct);
     });
 
-    if (orderProductsArray.length > 0) {
-      await orderProductsRepository.save(orderProductsArray);
-    }
+    await orderProductsRepository.save(orderProductsArray);
 
     return newOrder;
   }
