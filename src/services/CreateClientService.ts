@@ -9,7 +9,7 @@ interface IRequest {
   address: string;
   email: string;
   phone: string;
-  user_id?: string;
+  user_id: string;
 }
 
 class CreateUserService {
@@ -23,6 +23,26 @@ class CreateUserService {
     const clientRepository = getRepository(Client);
     const userRepository = getRepository(User);
 
+    const user = await userRepository.findOne({
+      where: {
+        id: user_id,
+      },
+    });
+
+    if (user.client_id) {
+      throw new AppError('This user already have client associated');
+    }
+
+    const clientAlreadyExist = await clientRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (clientAlreadyExist) {
+      throw new AppError('This email is already in use');
+    }
+
     const newClient = clientRepository.create({
       name,
       address,
@@ -30,18 +50,14 @@ class CreateUserService {
       phone,
     });
 
+    console.log(newClient);
+
     await clientRepository.save(newClient);
 
-    if (user_id) {
-      const user = await userRepository.findOne({
-        where: {
-          id: user_id,
-        },
-      });
-
+    if (!user.isSeller) {
       user.client_id = newClient.id;
 
-      await clientRepository.save(user);
+      await userRepository.save(user);
     }
 
     return newClient;

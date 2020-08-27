@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import CreateClientService from '../services/CreateClientService';
 import { getRepository } from 'typeorm';
+
+import ensureSellerUser from '../middlewares/ensureSellerUser';
+import CreateClientService from '../services/CreateClientService';
 import Client from '../models/Client';
 
 const clientsRouter = Router();
 
 clientsRouter.post('/', async (request, response) => {
+  const { id } = request.user;
   const { name, address, email, phone } = request.body;
   const createClientService = new CreateClientService();
 
@@ -14,12 +17,13 @@ clientsRouter.post('/', async (request, response) => {
     address,
     email,
     phone,
+    user_id: id,
   });
 
   return response.json(newClient);
 });
 
-clientsRouter.get('/', async (request, response) => {
+clientsRouter.get('/', ensureSellerUser, async (request, response) => {
   const clientRepository = getRepository(Client);
 
   const clients = await clientRepository.find();

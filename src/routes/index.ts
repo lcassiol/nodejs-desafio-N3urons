@@ -21,9 +21,9 @@ routes.use(ensureAuthenticated);
 routes.use('/orders', ordersRouter);
 routes.use('/products', productsRouter);
 routes.use('/products/categories', productCategoryRouter);
+routes.use('/clients', clientsRouter);
 
 routes.use(ensureSellerUser);
-routes.use('/clients', clientsRouter);
 routes.use('/products/stock', stockRouter);
 
 routes.get('', (request: Request, response: Response) => {

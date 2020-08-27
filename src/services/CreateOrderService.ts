@@ -6,6 +6,7 @@ import OrderProducts from '../models/OrderProducts';
 import OrderStatus from '../models/OrderStatus';
 import Stock from '../models/Stock';
 import Product from '../models/Product';
+import User from '../models/User';
 
 interface IRequest {
   subsidiary_id: number;
@@ -32,6 +33,17 @@ class CreateOrderService {
     const orderStatusRepository = getRepository(OrderStatus);
     const stockRepository = getRepository(Stock);
     const productRepository = getRepository(Product);
+    const userRepository = getRepository(User);
+
+    const user = await userRepository.findOne({
+      where: {
+        id: user_id,
+      },
+    });
+
+    if (!user.isSeller && user.client_id !== client_id) {
+      throw new AppError('Only sellers can create order to other clients');
+    }
 
     const orderStatusProcessing = await orderStatusRepository.findOne({
       where: {
@@ -100,10 +112,12 @@ class CreateOrderService {
 
     //check cliente id
     //calc total, discount, subtotal
+    let total = subtotal - discount;
+    total = total < 0 ? 0 : total;
 
     const newOrder = orderRepository.create({
       client_id,
-      total: subtotal - discount,
+      total,
       discount,
       subtotal,
       subsidiary_id,
