@@ -1,9 +1,10 @@
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
 import OrderProducts from '../models/OrderProducts';
 import OrderStatus from '../models/OrderStatus';
+import Stock from '../models/Stock';
 
 interface IRequest {
   subsidiary_id: number;
@@ -30,6 +31,7 @@ class CreateOrderService {
     const orderRepository = getRepository(Order);
     const orderProductsRepository = getRepository(OrderProducts);
     const orderStatusRepository = getRepository(OrderStatus);
+    const stockRepository = getRepository(Stock);
 
     const orderStatusProcessing = await orderStatusRepository.findOne({
       where: {
@@ -38,7 +40,18 @@ class CreateOrderService {
     });
 
     //check if subsidiary exists
-    //check if status exists
+
+    //check stock
+    const productIds = products.map(product => product.product_id);
+    const productInStock = await stockRepository.find({
+      where: {
+        subsidiary_id,
+        product_id: In(productIds),
+      },
+    });
+
+    console.log('Product in stock');
+    console.log(productInStock);
     //check cliente id
     //calc total, discount, subtotal
 
