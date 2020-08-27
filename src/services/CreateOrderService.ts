@@ -1,3 +1,5 @@
+import { injectable, inject } from 'tsyringe';
+
 import { getRepository, In } from 'typeorm';
 
 import AppError from '../errors/AppError';
@@ -7,6 +9,7 @@ import OrderStatus from '../models/OrderStatus';
 import Stock from '../models/Stock';
 import Product from '../models/Product';
 import User from '../models/User';
+import IOrderRepository from '../interfaces/IOrderRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -20,7 +23,13 @@ interface IRequest {
   }[];
 }
 
+@injectable()
 class CreateOrderService {
+  constructor(
+    @inject('OrderRepository')
+    private orderRepository: IOrderRepository,
+  ) {}
+
   public async execute({
     subsidiary_id,
     user_id,
@@ -28,7 +37,6 @@ class CreateOrderService {
     discount,
     products,
   }: IRequest): Promise<Order> {
-    const orderRepository = getRepository(Order);
     const orderProductsRepository = getRepository(OrderProducts);
     const orderStatusRepository = getRepository(OrderStatus);
     const stockRepository = getRepository(Stock);
@@ -115,7 +123,7 @@ class CreateOrderService {
     let total = subtotal - discount;
     total = total < 0 ? 0 : total;
 
-    const newOrder = orderRepository.create({
+    const newOrder = await this.orderRepository.create({
       client_id,
       total,
       discount,
@@ -124,8 +132,6 @@ class CreateOrderService {
       status_id: orderStatusProcessing.id,
       user_id,
     });
-
-    await orderRepository.save(newOrder);
 
     //insert on table order_products the products
     const orderProductsArray: OrderProducts[] = [];

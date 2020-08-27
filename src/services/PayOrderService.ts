@@ -1,8 +1,10 @@
+import { injectable, inject } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
 import OrderStatus from '../models/OrderStatus';
+import IOrderRepository from '../interfaces/IOrderRepository';
 
 interface IRequest {
   order_id: number;
@@ -10,13 +12,18 @@ interface IRequest {
   card_validate: string;
 }
 
+@injectable()
 class PayOrderService {
+  constructor(
+    @inject('OrderRepository')
+    private orderRepository: IOrderRepository,
+  ) {}
+
   public async execute({
     order_id,
     card_number,
     card_validate,
   }: IRequest): Promise<void> {
-    const orderRepository = getRepository(Order);
     const orderStatusRepository = getRepository(OrderStatus);
 
     const orderStatusWaiting = await orderStatusRepository.findOne({
@@ -25,11 +32,7 @@ class PayOrderService {
       },
     });
 
-    const orderExists = await orderRepository.findOne({
-      where: {
-        id: order_id,
-      },
-    });
+    const orderExists = await this.orderRepository.findById(order_id);
 
     if (orderExists) {
       //send message to rabbitmq to process payment
@@ -42,7 +45,7 @@ class PayOrderService {
 
       //change order_status to waiting payment
       orderExists.status_id = orderStatusWaiting.id;
-      await orderRepository.save(orderExists);
+      await this.orderRepository.update(orderExists);
     }
   }
 }

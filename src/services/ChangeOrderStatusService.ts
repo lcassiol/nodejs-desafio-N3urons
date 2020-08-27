@@ -1,8 +1,11 @@
+import { injectable, inject } from 'tsyringe';
+
 import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
 import OrderStatus from '../models/OrderStatus';
+import IOrderRepository from '../interfaces/IOrderRepository';
 
 interface IRequest {
   user_id: string;
@@ -10,20 +13,21 @@ interface IRequest {
   status_id: number;
 }
 
+@injectable()
 class ChangeOrderStatusService {
+  constructor(
+    @inject('OrderRepository')
+    private orderRepository: IOrderRepository,
+  ) {}
+
   public async execute({
     user_id,
     order_id,
     status_id,
   }: IRequest): Promise<Order> {
-    const orderRepository = getRepository(Order);
     const orderStatusRepository = getRepository(OrderStatus);
 
-    const orders = await orderRepository.find({
-      where: {
-        user_id: user_id,
-      },
-    });
+    const orders = await this.orderRepository.findByUserId(user_id);
 
     const findOrder = orders.find(order => order.id === order_id);
 
@@ -46,7 +50,7 @@ class ChangeOrderStatusService {
       status: findOrderStatus,
     });
 
-    await orderRepository.save(updatedOrder);
+    await this.orderRepository.update(updatedOrder);
 
     return updatedOrder;
   }

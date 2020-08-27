@@ -1,22 +1,22 @@
-import { getRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
+import IOrderRepository from '../interfaces/IOrderRepository';
 
 interface IRequest {
   user_id: string;
 }
 
+@injectable()
 class GetOrdersByUserService {
-  public async execute({ user_id }: IRequest): Promise<Order[]> {
-    const clientRepository = getRepository(Order);
+  constructor(
+    @inject('OrderRepository')
+    private orderRepository: IOrderRepository,
+  ) {}
 
-    const orders = await clientRepository.find({
-      where: {
-        user_id: user_id,
-      },
-      relations: ['order_products'],
-    });
+  public async execute({ user_id }: IRequest): Promise<Order[]> {
+    const orders = await this.orderRepository.findByUserId(user_id);
 
     return orders;
   }
