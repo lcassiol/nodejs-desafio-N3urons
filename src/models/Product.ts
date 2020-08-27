@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import ProductCategory from './ProductCategory';
 
-@Entity('order_status')
+@Entity('products')
 class Product {
   @PrimaryGeneratedColumn('increment')
   id: number;
