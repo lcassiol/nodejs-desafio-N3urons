@@ -10,7 +10,7 @@ import {
 import Subsidiary from './Subsidiary';
 import Product from './Product';
 
-@Entity('order_status')
+@Entity('stock')
 class Stock {
   @PrimaryGeneratedColumn('increment')
   id: number;
