@@ -15,6 +15,7 @@ class GetOrdersByUserService {
       where: {
         user_id: user_id,
       },
+      relations: ['order_products'],
     });
 
     return orders;
