@@ -15,7 +15,7 @@ routes.use('/sessions', sessionsRouter);
 routes.use('/users', usersRouter);
 
 routes.use(ensureAuthenticated);
-routes.use('/clientsRouter', clientsRouter);
+routes.use('/clients', clientsRouter);
 routes.use('/orders', ordersRouter);
 routes.use('/products', productsRouter);
 routes.use('/products/categories', productCategoryRouter);

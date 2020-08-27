@@ -9,7 +9,7 @@ const usersRouter = Router();
 usersRouter.post('/', async (request, response) => {
   const { login, name, password } = request.body;
   const createUserService = new CreateUserService();
-  const newUser = await createUserService.execute({ login, name, password });
+  const newUser = await createUserService.execute({ login, password });
 
   return response.json(newUser);
 });
