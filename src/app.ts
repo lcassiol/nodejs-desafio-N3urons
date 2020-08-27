@@ -8,6 +8,7 @@ import routes from './routes';
 import AppError from './errors/AppError';
 
 import './database';
+import './container';
 
 const app = express();
 

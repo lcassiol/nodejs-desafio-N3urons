@@ -1,9 +1,10 @@
-import { getRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import authConfig from '../config/auth';
 import AppError from '../errors/AppError';
 
-import authConfig from '../config/auth';
+import IUserRepository from '../interfaces/IUserRepository';
 import User from '../models/User';
 
 interface Request {
@@ -16,13 +17,15 @@ interface Response {
   token: string;
 }
 
+@injectable()
 class AuthenticateUserService {
-  public async execute({ login, password }: Request): Promise<Response> {
-    const userRepository = getRepository(User);
+  constructor(
+    @inject('UserRepository')
+    private userRepository: IUserRepository,
+  ) {}
 
-    const user = await userRepository.findOne({
-      where: { login },
-    });
+  public async execute({ login, password }: Request): Promise<Response> {
+    const user = await this.userRepository.findByLogin(login);
 
     if (!user) {
       throw new AppError('Incorrect login/password combination.');
