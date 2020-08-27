@@ -63,21 +63,38 @@ class CreateOrderService {
       throw new AppError('Stock unavailable');
     }
 
-    productInStock.forEach(productStock => {
-      const productIndex = products.findIndex(
-        product => product.product_id === productStock.product_id,
-      );
-      const tempProduct = products[productIndex];
+    products.forEach(product => {
       const realProduct = findProducts.find(
-        findProduct => findProduct.id === tempProduct.product_id,
+        findProduct => findProduct.id === product.product_id,
+      );
+      const stockIndex = productInStock.findIndex(
+        stock => stock.product_id === product.product_id,
       );
 
-      if (productStock.quantity >= tempProduct.quantity) {
-        productStock.quantity -= tempProduct.quantity;
-        subtotal += realProduct.price * tempProduct.quantity;
-        updatedStock.push(productStock);
+      if (stockIndex < 0) {
+        throw new AppError(
+          'Product name: ' +
+            realProduct.name +
+            ' id: ' +
+            product.product_id +
+            ' Stock unavailable',
+        );
+      }
+
+      const tempStock = productInStock[stockIndex];
+
+      if (tempStock.quantity >= product.quantity) {
+        tempStock.quantity -= product.quantity;
+        subtotal += realProduct.price * product.quantity;
+        updatedStock.push(tempStock);
       } else {
-        throw new AppError('Product ' + productStock.id + ' Stock unavailable');
+        throw new AppError(
+          'Product name: ' +
+            realProduct.name +
+            ' id:' +
+            product.product_id +
+            ' Stock unavailable',
+        );
       }
     });
 
