@@ -18,6 +18,9 @@ class User {
   login: string;
 
   @Column()
+  isSeller: boolean;
+
+  @Column()
   password: string;
 
   @Column()

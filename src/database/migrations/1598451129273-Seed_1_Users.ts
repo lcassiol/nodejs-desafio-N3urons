@@ -13,6 +13,7 @@ export class Seed1Users1598451129273 implements MigrationInterface {
         login: 'seller1',
         name: 'Bender',
         password: passwordHash,
+        isSeller: true,
       })
       .execute();
   }

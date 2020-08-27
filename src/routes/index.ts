@@ -12,9 +12,9 @@ import productCategoryRouter from './product.category.routes';
 const routes = Router();
 
 routes.use('/sessions', sessionsRouter);
+routes.use('/users', usersRouter);
 
 routes.use(ensureAuthenticated);
-routes.use('/users', usersRouter);
 routes.use('/clientsRouter', clientsRouter);
 routes.use('/orders', ordersRouter);
 routes.use('/products', productsRouter);
