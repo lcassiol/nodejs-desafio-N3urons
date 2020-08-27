@@ -10,6 +10,7 @@ import Stock from '../models/Stock';
 import Product from '../models/Product';
 import User from '../models/User';
 import IOrderRepository from '../interfaces/IOrderRepository';
+import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -28,6 +29,9 @@ class CreateOrderService {
   constructor(
     @inject('OrderRepository')
     private orderRepository: IOrderRepository,
+
+    @inject('OrderStatusRepository')
+    private orderStatusRepository: IOrderStatusRepository,
   ) {}
 
   public async execute({
@@ -38,7 +42,7 @@ class CreateOrderService {
     products,
   }: IRequest): Promise<Order> {
     const orderProductsRepository = getRepository(OrderProducts);
-    const orderStatusRepository = getRepository(OrderStatus);
+
     const stockRepository = getRepository(Stock);
     const productRepository = getRepository(Product);
     const userRepository = getRepository(User);
@@ -53,11 +57,9 @@ class CreateOrderService {
       throw new AppError('Only sellers can create order to other clients');
     }
 
-    const orderStatusProcessing = await orderStatusRepository.findOne({
-      where: {
-        name: 'Processing',
-      },
-    });
+    const orderStatusProcessing = await this.orderStatusRepository.findByName(
+      'Processing',
+    );
 
     //check stock
     const productIds = products.map(product => product.product_id);

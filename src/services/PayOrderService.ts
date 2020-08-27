@@ -1,10 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
-import Order from '../models/Order';
-import OrderStatus from '../models/OrderStatus';
+
 import IOrderRepository from '../interfaces/IOrderRepository';
+import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 
 interface IRequest {
   order_id: number;
@@ -17,6 +16,9 @@ class PayOrderService {
   constructor(
     @inject('OrderRepository')
     private orderRepository: IOrderRepository,
+
+    @inject('OrderStatusRepository')
+    private orderStatusRepository: IOrderStatusRepository,
   ) {}
 
   public async execute({
@@ -24,13 +26,9 @@ class PayOrderService {
     card_number,
     card_validate,
   }: IRequest): Promise<void> {
-    const orderStatusRepository = getRepository(OrderStatus);
-
-    const orderStatusWaiting = await orderStatusRepository.findOne({
-      where: {
-        name: 'Waiting Payment',
-      },
-    });
+    const orderStatusWaiting = await this.orderStatusRepository.findByName(
+      'Waiting Payment',
+    );
 
     const orderExists = await this.orderRepository.findById(order_id);
 

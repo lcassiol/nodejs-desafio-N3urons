@@ -1,11 +1,10 @@
 import { injectable, inject } from 'tsyringe';
 
-import { getRepository } from 'typeorm';
-
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
-import OrderStatus from '../models/OrderStatus';
+
 import IOrderRepository from '../interfaces/IOrderRepository';
+import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 
 interface IRequest {
   user_id: string;
@@ -18,6 +17,9 @@ class ChangeOrderStatusService {
   constructor(
     @inject('OrderRepository')
     private orderRepository: IOrderRepository,
+
+    @inject('OrderStatusRepository')
+    private orderStatusRepository: IOrderStatusRepository,
   ) {}
 
   public async execute({
@@ -25,8 +27,6 @@ class ChangeOrderStatusService {
     order_id,
     status_id,
   }: IRequest): Promise<Order> {
-    const orderStatusRepository = getRepository(OrderStatus);
-
     const orders = await this.orderRepository.findByUserId(user_id);
 
     const findOrder = orders.find(order => order.id === order_id);
@@ -35,11 +35,9 @@ class ChangeOrderStatusService {
       throw new AppError('You can only change your orders.');
     }
 
-    const findOrderStatus = await orderStatusRepository.findOne({
-      where: {
-        id: status_id,
-      },
-    });
+    const findOrderStatus = await this.orderStatusRepository.findById(
+      status_id,
+    );
 
     if (!findOrderStatus) {
       throw new AppError('Invalid order status.');
