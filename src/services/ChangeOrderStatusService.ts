@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
+import OrderStatus from '../models/OrderStatus';
 
 interface IRequest {
   user_id: string;
@@ -15,9 +16,10 @@ class ChangeOrderStatusService {
     order_id,
     status_id,
   }: IRequest): Promise<Order> {
-    const clientRepository = getRepository(Order);
+    const orderRepository = getRepository(Order);
+    const orderStatusRepository = getRepository(OrderStatus);
 
-    const orders = await clientRepository.find({
+    const orders = await orderRepository.find({
       where: {
         user_id: user_id,
       },
@@ -29,11 +31,24 @@ class ChangeOrderStatusService {
       throw new AppError('You can only change your orders.');
     }
 
-    findOrder.status_id = status_id;
+    const findOrderStatus = await orderStatusRepository.findOne({
+      where: {
+        id: status_id,
+      },
+    });
 
-    await clientRepository.save(findOrder);
+    if (!findOrderStatus) {
+      throw new AppError('Invalid order status.');
+    }
 
-    return findOrder;
+    const updatedOrder = Object.assign(findOrder, {
+      status_id: findOrderStatus.id,
+      status: findOrderStatus,
+    });
+
+    await orderRepository.save(updatedOrder);
+
+    return updatedOrder;
   }
 }
 

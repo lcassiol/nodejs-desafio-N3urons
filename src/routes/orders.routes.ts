@@ -1,7 +1,10 @@
 import { Router } from 'express';
+import { getRepository } from 'typeorm';
+
 import GetOrdersByUserService from '../services/GetOrdersByUserService';
 import ChangeOrderStatusService from '../services/ChangeOrderStatusService';
 import CreateOrderService from '../services/CreateOrderService';
+import OrderStatus from '../models/OrderStatus';
 
 const ordersRouter = Router();
 
@@ -14,6 +17,13 @@ ordersRouter.get('/', async (request, response) => {
   });
 
   return response.json(orders);
+});
+
+ordersRouter.get('/status', async (request, response) => {
+  const statusRepository = getRepository(OrderStatus);
+  const status = await statusRepository.find();
+
+  return response.json(status);
 });
 
 ordersRouter.post('/', async (request, response) => {
