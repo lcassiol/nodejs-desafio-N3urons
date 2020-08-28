@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
-import AppError from '../errors/AppError';
+import RabbitMQConfig from '../config/rabbitmq';
 
 import IOrderRepository from '../interfaces/IOrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
@@ -44,9 +44,12 @@ class PayOrderService {
         card_number,
         card_validate,
       };
-      const server = new RabbitMQServer('amqp://localhost:5672');
+      const server = new RabbitMQServer(RabbitMQConfig.url);
       await server.start();
-      await server.publishInQueue('payment', JSON.stringify(message));
+      await server.publishInQueue(
+        RabbitMQConfig.producerQueue,
+        JSON.stringify(message),
+      );
 
       // ---------------------
 
