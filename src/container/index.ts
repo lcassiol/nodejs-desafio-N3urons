@@ -15,6 +15,12 @@ import ClientRepository from '../repositories/ClientRepository';
 import IProductRepository from '../interfaces/IProductRepository';
 import ProductRepository from '../repositories/ProductRepository';
 
+import IStockRepository from '../interfaces/IStockRepository';
+import StockRepository from '../repositories/StockRepository';
+
+import IOrderProductsRepository from '../interfaces/IOrderProductsRepository';
+import OrderProductsRepository from '../repositories/OrderProductsRepository';
+
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 
 container.registerSingleton<IOrderRepository>(
@@ -35,4 +41,14 @@ container.registerSingleton<IClientRepository>(
 container.registerSingleton<IProductRepository>(
   'ProductRepository',
   ProductRepository,
+);
+
+container.registerSingleton<IStockRepository>(
+  'StockRepository',
+  StockRepository,
+);
+
+container.registerSingleton<IOrderProductsRepository>(
+  'OrderProductsRepository',
+  OrderProductsRepository,
 );

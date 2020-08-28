@@ -2,10 +2,11 @@ import { inject, injectable } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
-import Product from '../models/Product';
+
 import Stock from '../models/Stock';
 import Subsidiary from '../models/Subsidiary';
 import IProductRepository from '../interfaces/IProductRepository';
+import IStockRepository from '../interfaces/IStockRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -18,6 +19,9 @@ class CreateOrUpdateStockService {
   constructor(
     @inject('ProductRepository')
     private productRepository: IProductRepository,
+
+    @inject('StockRepository')
+    private stockRepository: IStockRepository,
   ) {}
 
   public async execute({
@@ -25,7 +29,6 @@ class CreateOrUpdateStockService {
     product_id,
     quantity,
   }: IRequest): Promise<Stock> {
-    const stockRepository = getRepository(Stock);
     const subsidiaryRepository = getRepository(Subsidiary);
 
     const subsidiaryExists = await subsidiaryRepository.findOne({
@@ -44,29 +47,28 @@ class CreateOrUpdateStockService {
       throw new AppError('Product does not exists');
     }
 
-    const productAlreadyInRepository = await stockRepository.findOne({
-      where: {
+    const productAlreadyInRepository = await this.stockRepository.findByProductId(
+      {
         subsidiary_id,
         product_id,
       },
-    });
+    );
 
     if (productAlreadyInRepository) {
       const updatedProductStock = Object.assign(productAlreadyInRepository, {
         quantity,
       });
 
-      await stockRepository.save(updatedProductStock);
+      await this.stockRepository.update(updatedProductStock);
 
       return updatedProductStock;
     } else {
-      const newProduct = stockRepository.create({
+      const newProduct = await this.stockRepository.create({
         product_id,
         quantity,
         subsidiary_id,
       });
 
-      await stockRepository.save(newProduct);
       return newProduct;
     }
   }

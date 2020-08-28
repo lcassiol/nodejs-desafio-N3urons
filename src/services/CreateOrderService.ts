@@ -1,7 +1,5 @@
 import { injectable, inject } from 'tsyringe';
 
-import { getRepository, In } from 'typeorm';
-
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
 import OrderProducts from '../models/OrderProducts';
@@ -12,6 +10,7 @@ import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 import IUserRepository from '../interfaces/IUserRepository';
 import IProductRepository from '../interfaces/IProductRepository';
 import IOrderProductsRepository from '../interfaces/IOrderProductsRepository';
+import IStockRepository from '../interfaces/IStockRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -42,6 +41,9 @@ class CreateOrderService {
 
     @inject('OrderProductsRepository')
     private orderProductsRepository: IOrderProductsRepository,
+
+    @inject('StockRepository')
+    private stockRepository: IStockRepository,
   ) {}
 
   public async execute({
@@ -51,8 +53,6 @@ class CreateOrderService {
     discount,
     products,
   }: IRequest): Promise<Order> {
-    const stockRepository = getRepository(Stock);
-
     const user = await this.userRepository.findById(user_id);
 
     if (!user.isSeller && user.client_id !== client_id) {
@@ -67,11 +67,9 @@ class CreateOrderService {
     const productIds = products.map(product => product.product_id);
     const findProducts = await this.productRepository.findByIds(productIds);
 
-    const productInStock = await stockRepository.find({
-      where: {
-        subsidiary_id,
-        product_id: In(productIds),
-      },
+    const productInStock = await this.stockRepository.findByProductsIds({
+      subsidiary_id,
+      productIds,
     });
 
     console.log('Product in stock');
@@ -151,7 +149,7 @@ class CreateOrderService {
 
     await this.orderProductsRepository.bulkInsert(orderProductsArray);
     // update stock
-    await stockRepository.save(updatedStock);
+    await this.stockRepository.bulkUpdate(updatedStock);
 
     return newOrder;
   }

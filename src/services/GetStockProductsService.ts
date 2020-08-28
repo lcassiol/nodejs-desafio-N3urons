@@ -1,17 +1,23 @@
-import { getRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 
 import AppError from '../errors/AppError';
-import Product from '../models/Product';
+
 import Stock from '../models/Stock';
 import Subsidiary from '../models/Subsidiary';
+import IStockRepository from '../interfaces/IStockRepository';
 
 interface IRequest {
   subsidiary_id: number;
 }
 
+@injectable()
 class GetStockProductsService {
+  constructor(
+    @inject('StockRepository')
+    private stockRepository: IStockRepository,
+  ) {}
+
   public async execute({ subsidiary_id }: IRequest): Promise<Stock[]> {
-    const stockRepository = getRepository(Stock);
     const subsidiaryRepository = getRepository(Subsidiary);
 
     const subsidiaryExist = await subsidiaryRepository.findOne({
@@ -24,11 +30,7 @@ class GetStockProductsService {
       throw new AppError('Subsidiary invalid');
     }
 
-    const stockProducts = stockRepository.find({
-      where: {
-        subsidiary_id,
-      },
-    });
+    const stockProducts = this.stockRepository.findBySubsidiary(subsidiary_id);
 
     return stockProducts;
   }
