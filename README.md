@@ -61,6 +61,6 @@ Com as seguintes regras:
 [Basta baixar e importar](https://github.com/lcassiol/nodejs-desafio-N3urons/blob/master/Insomnia%20-%20N3urons%20requests.json)
 
 
-## Para facilitar o entendimento este foi o diagrama desenhado para o banco de dados 
+## Para facilitar o entendimento este foi o diagrama idealizado para o banco de dados usado no projeto
 
 <img src="https://github.com/lcassiol/nodejs-desafio-N3urons/blob/master/diagrama%20ER%20desafio%20n3urons.png?raw=true" alt="er diagram" />
