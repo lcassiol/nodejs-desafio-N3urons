@@ -4,6 +4,7 @@ import 'express-async-errors';
 import 'reflect-metadata';
 
 import * as cors from 'cors';
+import Consumer from './queue/ConsumerConfirmPayment';
 import routes from './routes';
 import AppError from './errors/AppError';
 
@@ -31,5 +32,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     message: 'Internal server error',
   });
 });
+
+Consumer();
 
 export default app;
