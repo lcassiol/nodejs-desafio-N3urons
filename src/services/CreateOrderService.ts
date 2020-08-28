@@ -5,14 +5,13 @@ import { getRepository, In } from 'typeorm';
 import AppError from '../errors/AppError';
 import Order from '../models/Order';
 import OrderProducts from '../models/OrderProducts';
-import OrderStatus from '../models/OrderStatus';
 import Stock from '../models/Stock';
-import Product from '../models/Product';
-import User from '../models/User';
+
 import IOrderRepository from '../interfaces/IOrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 import IUserRepository from '../interfaces/IUserRepository';
 import IProductRepository from '../interfaces/IProductRepository';
+import IOrderProductsRepository from '../interfaces/IOrderProductsRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -40,6 +39,9 @@ class CreateOrderService {
 
     @inject('ProductRepository')
     private productRepository: IProductRepository,
+
+    @inject('OrderProductsRepository')
+    private orderProductsRepository: IOrderProductsRepository,
   ) {}
 
   public async execute({
@@ -49,8 +51,6 @@ class CreateOrderService {
     discount,
     products,
   }: IRequest): Promise<Order> {
-    const orderProductsRepository = getRepository(OrderProducts);
-
     const stockRepository = getRepository(Stock);
 
     const user = await this.userRepository.findById(user_id);
@@ -139,17 +139,17 @@ class CreateOrderService {
       const findProductIndex = findProducts.findIndex(
         dbProduct => dbProduct.id === product.product_id,
       );
-      const orderProduct = orderProductsRepository.create({
+      const orderProduct = {
         order_id: newOrder.id,
         product_id: product.product_id,
         quantity: product.quantity,
         total: findProducts[findProductIndex].price * product.quantity,
-      });
+      } as OrderProducts;
 
       orderProductsArray.push(orderProduct);
     });
 
-    await orderProductsRepository.save(orderProductsArray);
+    await this.orderProductsRepository.bulkInsert(orderProductsArray);
     // update stock
     await stockRepository.save(updatedStock);
 
