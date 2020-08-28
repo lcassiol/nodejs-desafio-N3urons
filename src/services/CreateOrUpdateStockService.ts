@@ -1,9 +1,11 @@
+import { inject, injectable } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import Product from '../models/Product';
 import Stock from '../models/Stock';
 import Subsidiary from '../models/Subsidiary';
+import IProductRepository from '../interfaces/IProductRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -11,7 +13,13 @@ interface IRequest {
   quantity: number;
 }
 
+@injectable()
 class CreateOrUpdateStockService {
+  constructor(
+    @inject('ProductRepository')
+    private productRepository: IProductRepository,
+  ) {}
+
   public async execute({
     subsidiary_id,
     product_id,
@@ -19,7 +27,6 @@ class CreateOrUpdateStockService {
   }: IRequest): Promise<Stock> {
     const stockRepository = getRepository(Stock);
     const subsidiaryRepository = getRepository(Subsidiary);
-    const productRepository = getRepository(Product);
 
     const subsidiaryExists = await subsidiaryRepository.findOne({
       where: {
@@ -31,11 +38,7 @@ class CreateOrUpdateStockService {
       throw new AppError('Subsidiary does not exists');
     }
 
-    const productExists = await productRepository.findOne({
-      where: {
-        id: product_id,
-      },
-    });
+    const productExists = await this.productRepository.findById(product_id);
 
     if (!productExists) {
       throw new AppError('Product does not exists');

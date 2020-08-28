@@ -12,6 +12,7 @@ import User from '../models/User';
 import IOrderRepository from '../interfaces/IOrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 import IUserRepository from '../interfaces/IUserRepository';
+import IProductRepository from '../interfaces/IProductRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -36,6 +37,9 @@ class CreateOrderService {
 
     @inject('UserRepository')
     private userRepository: IUserRepository,
+
+    @inject('ProductRepository')
+    private productRepository: IProductRepository,
   ) {}
 
   public async execute({
@@ -48,7 +52,6 @@ class CreateOrderService {
     const orderProductsRepository = getRepository(OrderProducts);
 
     const stockRepository = getRepository(Stock);
-    const productRepository = getRepository(Product);
 
     const user = await this.userRepository.findById(user_id);
 
@@ -62,11 +65,7 @@ class CreateOrderService {
 
     //check stock
     const productIds = products.map(product => product.product_id);
-    const findProducts = await productRepository.find({
-      where: {
-        id: In(productIds),
-      },
-    });
+    const findProducts = await this.productRepository.findByIds(productIds);
 
     const productInStock = await stockRepository.find({
       where: {

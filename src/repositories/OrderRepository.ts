@@ -41,7 +41,7 @@ class OrderRepository implements IOrderRepository {
     return updatedOrder;
   }
 
-  public async findByUserId(user_id): Promise<Order[] | undefined> {
+  public async findByUserId(user_id: string): Promise<Order[]> {
     const orders = await this.ormRepository.find({
       where: {
         user_id,
