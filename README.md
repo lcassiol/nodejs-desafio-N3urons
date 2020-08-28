@@ -49,10 +49,11 @@ Com as seguintes regras:
  **1.** Dar o comando `yarn` no terminal na pasta do projeto para baixar as dependências<br />
  **2.** Ter o postgres instalado, criar um database chamado `sellpoint`, um usuário `selluser` senha `123321`<br />
   * **sugestão utilizar o docker**: https://hub.docker.com/_/postgres <br />
- 
- **3.** Alterar o caminho da url do banco de dados no arquivo `ormconfig.json`<br />
- **4.** Rodar a migração do typeorm `yarn typeorm migration:run`<br />
- **5.** Rodar a aplicação `yarn dev:server`
+ **3.** Ter o RabbitMQ instalado <br />
+   * **sugestão utilizar o docker**: https://hub.docker.com/_/rabbitmq <br />
+ **4.** Alterar o caminho da url do banco de dados no arquivo `ormconfig.json`<br />
+ **5.** Rodar a migração do typeorm `yarn typeorm migration:run`<br />
+ **6.** Rodar a aplicação `yarn dev:server`
  
 ------------------------------- 
 
@@ -64,3 +65,8 @@ Com as seguintes regras:
 ## Para facilitar o entendimento este foi o diagrama idealizado para o banco de dados usado no projeto
 
 <img src="https://github.com/lcassiol/nodejs-desafio-N3urons/blob/master/diagrama%20ER%20desafio%20n3urons.png?raw=true" alt="er diagram" />
+
+
+--------------------------------
+## Link para o projeto consumer
+https://github.com/lcassiol/nodejs-consumer-desafio-n3urons
