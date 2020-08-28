@@ -31,6 +31,11 @@ Com as seguintes regras:
 
 ## Utilização
 
+- Ao finalizar a migração alguns dados ja foram criados, 
+  - Filial `Recife I` ja vai existir. 
+  - Um usuário do tipo vendedor, login `seller1` password `cassio123`.
+  - Categorias de produtos `Adventure`, `Science`, `Romance`
+  - E os status dos pedidos `Processing`, `Waiting Payment`, `Finished`, `Cancelled`
 - O sistema desenvolvido foi feito para que exista um usuário do tipo vendedor, onde ele pode **cadastrar um cliente e realizar uma compra para o mesmo, cadastrar produtos, listar clientes, verificar o estoque, atualizar o estoque**. Na listagem dos pedidos um usuário do tipo vendedor tambem só pode ver os pedidos realizados por ele, bem como cancelar seus pedidos. 
 - Um usuário do tipo cliente tambem pode realizar o cadastro, o fluxo seria **criar um usuário,criar um cliente, ao criar um cliente com um usuário que não seja do tipo vendedor o usuário vai ficar associado ao cliente** assim a realização das compras podem ser feitas com toda as entidades preenchidas.
 
