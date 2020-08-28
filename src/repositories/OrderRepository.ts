@@ -49,8 +49,6 @@ class OrderRepository implements IOrderRepository {
       relations: ['order_products'],
     });
 
-    console.log(orders);
-
     return orders;
   }
 

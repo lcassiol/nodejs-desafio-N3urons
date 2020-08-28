@@ -4,6 +4,6 @@ import ICreateProductDTO from '../dtos/ICreateProductDTO';
 export default interface IProductRepository {
   create(data: ICreateProductDTO): Promise<Product>;
   list(): Promise<Product[]>;
-  findById(id: number): Promise<Product | undefined>;
+  findById(id: number): Promise<Product>;
   findByIds(id: number[]): Promise<Product[]>;
 }
