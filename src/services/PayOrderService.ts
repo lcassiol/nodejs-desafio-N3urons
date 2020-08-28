@@ -4,6 +4,7 @@ import AppError from '../errors/AppError';
 
 import IOrderRepository from '../interfaces/IOrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
+import RabbitMQServer from '../queue/RabbitMQServer';
 
 interface IRequest {
   order_id: number;
@@ -37,8 +38,15 @@ class PayOrderService {
       //send message to rabbitmq to process payment
       const totalPrice = orderExists.total;
       const order_id = orderExists.id;
-      //card_number
-      //card_validate
+      const message = {
+        totalPrice,
+        order_id,
+        card_number,
+        card_validate,
+      };
+      const server = new RabbitMQServer('amqp://localhost:5672');
+      await server.start();
+      await server.publishInQueue('payment', JSON.stringify(message));
 
       // ---------------------
 
