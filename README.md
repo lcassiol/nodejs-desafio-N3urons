@@ -53,4 +53,10 @@ Com as seguintes regras:
  **3.** Alterar o caminho da url do banco de dados no arquivo `ormconfig.json`<br />
  **4.** Rodar a migração do typeorm `yarn typeorm migration:run`<br />
  **5.** Rodar a aplicação `yarn dev:server`
+ 
+------------------------------- 
+
+## Para facilitar os testes um arquivo com as requests para os endpoints do sistema foi exportado do [Insomnia](https://insomnia.rest)
+
+[Basta baixar e importar](https://github.com/lcassiol/nodejs-desafio-N3urons/blob/master/Insomnia%20-%20N3urons%20requests.json)
 
