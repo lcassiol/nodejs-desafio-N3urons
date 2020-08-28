@@ -3,8 +3,9 @@ import { injectable, inject } from 'tsyringe';
 import AppError from '../errors/AppError';
 
 import Stock from '../models/Stock';
-import Subsidiary from '../models/Subsidiary';
+
 import IStockRepository from '../interfaces/IStockRepository';
+import ISubsidiaryRepository from '../interfaces/ISubsidiaryRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -15,16 +16,15 @@ class GetStockProductsService {
   constructor(
     @inject('StockRepository')
     private stockRepository: IStockRepository,
+
+    @inject('SubsidiaryRepository')
+    private subsidiaryRepository: ISubsidiaryRepository,
   ) {}
 
   public async execute({ subsidiary_id }: IRequest): Promise<Stock[]> {
-    const subsidiaryRepository = getRepository(Subsidiary);
-
-    const subsidiaryExist = await subsidiaryRepository.findOne({
-      where: {
-        id: subsidiary_id,
-      },
-    });
+    const subsidiaryExist = await this.subsidiaryRepository.findById(
+      subsidiary_id,
+    );
 
     if (!subsidiaryExist) {
       throw new AppError('Subsidiary invalid');

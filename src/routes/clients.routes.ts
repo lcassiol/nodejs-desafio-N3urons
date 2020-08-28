@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { container } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
 import ensureSellerUser from '../middlewares/ensureSellerUser';
@@ -10,7 +11,7 @@ const clientsRouter = Router();
 clientsRouter.post('/', async (request, response) => {
   const { id } = request.user;
   const { name, address, email, phone } = request.body;
-  const createClientService = new CreateClientService();
+  const createClientService = container.resolve(CreateClientService);
 
   const newClient = await createClientService.execute({
     name,

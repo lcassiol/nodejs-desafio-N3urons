@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { container } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
 import GetOrdersByUserService from '../services/GetOrdersByUserService';
@@ -10,7 +11,7 @@ const ordersRouter = Router();
 
 ordersRouter.get('/', async (request, response) => {
   const user_id = request.user.id;
-  const getOrderByUser = new GetOrdersByUserService();
+  const getOrderByUser = container.resolve(GetOrdersByUserService);
 
   const orders = await getOrderByUser.execute({
     user_id,

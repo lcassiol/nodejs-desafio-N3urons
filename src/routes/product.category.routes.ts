@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import CreateProductService from '../services/CreateProductService';
+
 import { getRepository } from 'typeorm';
 import ProductCategory from '../models/ProductCategory';
 
