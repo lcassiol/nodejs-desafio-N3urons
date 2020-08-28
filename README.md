@@ -1,7 +1,11 @@
-# Awesome Project Build with TypeORM
+# Desafio backend N3urons
 
-Steps to run this project:
+Para rodar o projeto:
 
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Run `npm start` command
+1. Dar o comando `yarn` no terminal na pasta do projeto para baixar as dependências
+2. Ter o postgres instalado, criar um database chamado `sellpoint`, um usuário `selluser` senha `123321`
+  * sugestão utilizar o docker: https://hub.docker.com/_/postgres
+2. Alterar o caminho da url do banco de dados no arquivo `ormconfig.json`
+3. Rodar a migração do typeorm `yarn typeorm migrate:run`
+4. Rodar a aplicação `yarn dev:server`
+
