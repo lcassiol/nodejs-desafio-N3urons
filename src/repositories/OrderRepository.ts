@@ -49,7 +49,6 @@ class OrderRepository implements IOrderRepository {
       relations: ['order_products'],
     });
 
-    console.log('Verificar se nao tiver pedidos');
     console.log(orders);
 
     return orders;

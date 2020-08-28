@@ -72,8 +72,6 @@ class CreateOrderService {
       productIds,
     });
 
-    console.log('Product in stock');
-    console.log(productInStock);
     const updatedStock: Stock[] = [];
     let subtotal = 0;
 
