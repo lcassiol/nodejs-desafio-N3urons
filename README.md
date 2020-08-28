@@ -1,6 +1,6 @@
 # Desafio backend N3urons
 
-## Proposta do desafio
+## ✨Proposta do desafio
 
 O objetivo do projeto seria desenvolver o backend de um sistema de vendas. <br />
 Entidades do sistema: 
@@ -17,7 +17,7 @@ Com as seguintes regras:
 - O usuário logado só pode cancelar pedidos realizados por ele.
 
 
-## Tecnologias
+## 🖥 Tecnologias
 - [Autenticação JWT](https://github.com/auth0/node-jsonwebtoken#readme)
 - [Typescript](https://github.com/microsoft/TypeScript)
 - [Express](https://github.com/expressjs/express)
@@ -29,7 +29,7 @@ Com as seguintes regras:
 - [Prettier](https://github.com/prettier/prettier)
 - [EditorConfig](https://github.com/editorconfig/editorconfig-vscode)
 
-## Utilização
+## 📦 Utilização
 
 - Ao finalizar a migração alguns dados ja foram criados: 
   - Filial `Recife I` ja vai existir. 
@@ -40,11 +40,11 @@ Com as seguintes regras:
 - Um usuário do tipo cliente tambem pode realizar o cadastro, o fluxo seria **criar um usuário,criar um cliente, ao criar um cliente com um usuário que não seja do tipo vendedor o usuário vai ficar associado ao cliente** assim a realização das compras podem ser feitas com toda as entidades preenchidas.
 
 
-## Fluxo do sistema
+## ♻ Fluxo do sistema
 - Usuario realiza login na aplicação, cria um cliente, lista produtos, seleciona os produtos e realiza a criação de um novo pedido, realiza chamada para pagamento do pedido.
 
 
-## Para rodar o projeto:
+## ▶️ Para rodar o projeto:
 
  **1.** Dar o comando `yarn` no terminal na pasta do projeto para baixar as dependências<br />
  **2.** Ter o postgres instalado, criar um database chamado `sellpoint`, um usuário `selluser` senha `123321`<br />
