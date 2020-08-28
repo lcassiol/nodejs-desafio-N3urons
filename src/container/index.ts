@@ -9,6 +9,9 @@ import OrderRepository from '../repositories/OrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
 import OrderStatusRepository from '../repositories/OrderStatusRepository';
 
+import IClientRepository from '../interfaces/IClientRepository';
+import ClientRepository from '../repositories/ClientRepository';
+
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 
 container.registerSingleton<IOrderRepository>(
@@ -19,4 +22,9 @@ container.registerSingleton<IOrderRepository>(
 container.registerSingleton<IOrderStatusRepository>(
   'OrderStatusRepository',
   OrderStatusRepository,
+);
+
+container.registerSingleton<IClientRepository>(
+  'ClientRepository',
+  ClientRepository,
 );
