@@ -11,6 +11,7 @@ import Product from '../models/Product';
 import User from '../models/User';
 import IOrderRepository from '../interfaces/IOrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
+import IUserRepository from '../interfaces/IUserRepository';
 
 interface IRequest {
   subsidiary_id: number;
@@ -32,6 +33,9 @@ class CreateOrderService {
 
     @inject('OrderStatusRepository')
     private orderStatusRepository: IOrderStatusRepository,
+
+    @inject('UserRepository')
+    private userRepository: IUserRepository,
   ) {}
 
   public async execute({
@@ -45,13 +49,8 @@ class CreateOrderService {
 
     const stockRepository = getRepository(Stock);
     const productRepository = getRepository(Product);
-    const userRepository = getRepository(User);
 
-    const user = await userRepository.findOne({
-      where: {
-        id: user_id,
-      },
-    });
+    const user = await this.userRepository.findById(user_id);
 
     if (!user.isSeller && user.client_id !== client_id) {
       throw new AppError('Only sellers can create order to other clients');

@@ -22,6 +22,11 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
+  public async update(user: ICreateUserDTO): Promise<User> {
+    const updatedUser = await this.ormRepository.save(user);
+    return updatedUser;
+  }
+
   public async findByLogin(login: string): Promise<User | undefined> {
     const findUser = await this.ormRepository.findOne({
       where: { login },

@@ -2,8 +2,9 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '../errors/AppError';
 import Client from '../models/Client';
-import User from '../models/User';
+
 import IClientRepository from '../interfaces/IClientRepository';
+import IUserRepository from '../interfaces/IUserRepository';
 
 interface IRequest {
   name: string;
@@ -18,6 +19,9 @@ class CreateUserService {
   constructor(
     @inject('ClientRepository')
     private clientRepository: IClientRepository,
+
+    @inject('UserRepository')
+    private userRepository: IUserRepository,
   ) {}
 
   public async execute({
@@ -27,13 +31,7 @@ class CreateUserService {
     phone,
     user_id,
   }: IRequest): Promise<Client> {
-    const userRepository = getRepository(User);
-
-    const user = await userRepository.findOne({
-      where: {
-        id: user_id,
-      },
-    });
+    const user = await this.userRepository.findById(user_id);
 
     if (user.client_id) {
       throw new AppError('This user already have client associated');
@@ -55,7 +53,7 @@ class CreateUserService {
     if (!user.isSeller) {
       user.client_id = newClient.id;
 
-      await userRepository.save(user);
+      await this.userRepository.update(user);
     }
 
     return newClient;

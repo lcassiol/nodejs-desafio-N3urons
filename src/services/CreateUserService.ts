@@ -1,37 +1,34 @@
+import { injectable, inject } from 'tsyringe';
 import { hash } from 'bcryptjs';
-import { getRepository } from 'typeorm';
 
 import AppError from '../errors/AppError';
 import User from '../models/User';
+import IUserRepository from '../interfaces/IUserRepository';
 
 interface IRequest {
   login: string;
   password: string;
 }
 
+@injectable()
 class CreateUserService {
-  public async execute({ login, password }: IRequest): Promise<User> {
-    const userRepository = getRepository(User);
+  constructor(
+    @inject('UserRepository')
+    private userRepository: IUserRepository,
+  ) {}
 
-    const userAlreadyExists = await userRepository.findOne({
-      where: {
-        login,
-      },
-    });
+  public async execute({ login, password }: IRequest): Promise<User> {
+    const userAlreadyExists = await this.userRepository.findByLogin(login);
 
     if (userAlreadyExists) {
       throw new AppError('Login unavailable!');
     }
 
     const passwordHash = await hash(password, 8);
-    const newUser = userRepository.create({
+    const newUser = await this.userRepository.create({
       login,
       password: passwordHash,
     });
-
-    console.log(newUser);
-
-    await userRepository.save(newUser);
 
     delete newUser.password;
 
