@@ -44,6 +44,7 @@ class PayOrderService {
 
       //change order_status to waiting payment
       orderExists.status_id = orderStatusWaiting.id;
+      orderExists.status = orderStatusWaiting;
       await this.orderRepository.update(orderExists);
     }
   }

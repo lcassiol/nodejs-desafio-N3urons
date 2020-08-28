@@ -14,7 +14,7 @@ paymentRouter.post('/', async (request, response) => {
     card_validate,
   });
 
-  return response.status(204);
+  return response.status(204).send();
 });
 
 export default paymentRouter;
