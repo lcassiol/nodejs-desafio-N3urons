@@ -12,6 +12,12 @@ class ClientRepository implements IClientRepository {
     this.ormRepository = getRepository(Client);
   }
 
+  public async list(): Promise<Client[]> {
+    const clients = await this.ormRepository.find();
+
+    return clients;
+  }
+
   public async create({
     name,
     email,

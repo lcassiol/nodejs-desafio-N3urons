@@ -1,14 +1,14 @@
 import { Router } from 'express';
+import { container } from 'tsyringe';
 
-import { getRepository } from 'typeorm';
-import ProductCategory from '../models/ProductCategory';
+import ListProductCategory from '../services/ListProductCategoryService';
 
 const productCategoryRouter = Router();
 
 productCategoryRouter.get('/', async (request, response) => {
-  const productCategoryRepository = getRepository(ProductCategory);
+  const listProductCategory = container.resolve(ListProductCategory);
 
-  const categories = await productCategoryRepository.find();
+  const categories = await listProductCategory.execute();
 
   return response.json(categories);
 });

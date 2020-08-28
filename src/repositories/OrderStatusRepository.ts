@@ -10,14 +10,20 @@ class OrderStatusRepository implements IOrderStatusRepository {
     this.ormRepository = getRepository(OrderStatus);
   }
 
+  public async list(): Promise<OrderStatus[]> {
+    const orderStatus = await this.ormRepository.find();
+
+    return orderStatus;
+  }
+
   public async findById(id: number): Promise<OrderStatus | undefined> {
-    const order = await this.ormRepository.findOne({
+    const status = await this.ormRepository.findOne({
       where: {
         id,
       },
     });
 
-    return order;
+    return status;
   }
 
   public async findByName(name: string): Promise<OrderStatus | undefined> {

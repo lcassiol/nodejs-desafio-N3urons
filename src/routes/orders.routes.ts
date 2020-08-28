@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
-import { getRepository } from 'typeorm';
 
 import GetOrdersByUserService from '../services/GetOrdersByUserService';
 import ChangeOrderStatusService from '../services/ChangeOrderStatusService';
 import CreateOrderService from '../services/CreateOrderService';
-import OrderStatus from '../models/OrderStatus';
+import ListOrderStatusService from '../services/ListOrderStatusService';
 
 const ordersRouter = Router();
 
@@ -21,8 +20,9 @@ ordersRouter.get('/', async (request, response) => {
 });
 
 ordersRouter.get('/status', async (request, response) => {
-  const statusRepository = getRepository(OrderStatus);
-  const status = await statusRepository.find();
+  const listOrderStatusService = container.resolve(ListOrderStatusService);
+
+  const status = await listOrderStatusService.execute();
 
   return response.json(status);
 });
@@ -37,7 +37,7 @@ ordersRouter.post('/', async (request, response) => {
     subtotal,
   } = request.body;
 
-  const createOrderService = new CreateOrderService();
+  const createOrderService = container.resolve(CreateOrderService);
 
   const orders = await createOrderService.execute({
     user_id,
@@ -55,7 +55,7 @@ ordersRouter.put('/:id', async (request, response) => {
   const { id } = request.params;
   const { status_id } = request.body;
   const user_id = request.user.id;
-  const changeOrderStatus = new ChangeOrderStatusService();
+  const changeOrderStatus = container.resolve(ChangeOrderStatusService);
 
   const order = await changeOrderStatus.execute({
     user_id,

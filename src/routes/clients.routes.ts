@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
-import { getRepository } from 'typeorm';
 
 import ensureSellerUser from '../middlewares/ensureSellerUser';
 import CreateClientService from '../services/CreateClientService';
-import Client from '../models/Client';
+import ListClientService from '../services/ListClientService';
 
 const clientsRouter = Router();
 
@@ -25,9 +24,8 @@ clientsRouter.post('/', async (request, response) => {
 });
 
 clientsRouter.get('/', ensureSellerUser, async (request, response) => {
-  const clientRepository = getRepository(Client);
-
-  const clients = await clientRepository.find();
+  const listClientService = container.resolve(ListClientService);
+  const clients = await listClientService.execute();
 
   return response.json(clients);
 });
