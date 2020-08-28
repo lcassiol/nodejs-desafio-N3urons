@@ -46,6 +46,6 @@ Com as seguintes regras:
   * **sugestão utilizar o docker**: https://hub.docker.com/_/postgres <br />
  
  **3.** Alterar o caminho da url do banco de dados no arquivo `ormconfig.json`<br />
- **4.** Rodar a migração do typeorm `yarn typeorm migrate:run`<br />
+ **4.** Rodar a migração do typeorm `yarn typeorm migration:run`<br />
  **5.** Rodar a aplicação `yarn dev:server`
 
