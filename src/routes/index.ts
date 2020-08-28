@@ -10,6 +10,7 @@ import ordersRouter from './orders.routes';
 import productsRouter from './products.routes';
 import productCategoryRouter from './product.category.routes';
 import stockRouter from './stock.routes';
+import paymentRouter from './payment.routes';
 
 const routes = Router();
 
@@ -22,6 +23,7 @@ routes.use('/orders', ordersRouter);
 routes.use('/products', productsRouter);
 routes.use('/products/categories', productCategoryRouter);
 routes.use('/clients', clientsRouter);
+routes.use('/payment', paymentRouter);
 
 routes.use(ensureSellerUser);
 routes.use('/products/stock', stockRouter);

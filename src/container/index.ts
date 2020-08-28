@@ -21,6 +21,12 @@ import StockRepository from '../repositories/StockRepository';
 import IOrderProductsRepository from '../interfaces/IOrderProductsRepository';
 import OrderProductsRepository from '../repositories/OrderProductsRepository';
 
+import IProductCategoryRepository from '../interfaces/IProductCategoryRepository';
+import ProductCategoryRepository from '../repositories/ProductCategoryRepository';
+
+import ISubsidiaryRepository from '../interfaces/ISubsidiaryRepository';
+import SubsidiaryRepository from '../repositories/SubsidiaryRepository';
+
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 
 container.registerSingleton<IOrderRepository>(
@@ -51,4 +57,14 @@ container.registerSingleton<IStockRepository>(
 container.registerSingleton<IOrderProductsRepository>(
   'OrderProductsRepository',
   OrderProductsRepository,
+);
+
+container.registerSingleton<IProductCategoryRepository>(
+  'ProductCategoryRepository',
+  ProductCategoryRepository,
+);
+
+container.registerSingleton<ISubsidiaryRepository>(
+  'SubsidiaryRepository',
+  SubsidiaryRepository,
 );

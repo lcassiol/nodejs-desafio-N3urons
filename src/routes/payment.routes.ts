@@ -2,9 +2,9 @@ import { Router } from 'express';
 import { container } from 'tsyringe';
 import PayOrderService from '../services/PayOrderService';
 
-const clientsRouter = Router();
+const paymentRouter = Router();
 
-clientsRouter.post('/', async (request, response) => {
+paymentRouter.post('/', async (request, response) => {
   const { order_id, card_number, card_validate } = request.body;
   const payOrderService = container.resolve(PayOrderService);
 
@@ -17,4 +17,4 @@ clientsRouter.post('/', async (request, response) => {
   return response.status(204);
 });
 
-export default clientsRouter;
+export default paymentRouter;

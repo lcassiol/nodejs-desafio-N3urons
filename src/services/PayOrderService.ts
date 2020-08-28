@@ -33,6 +33,7 @@ class PayOrderService {
     const orderExists = await this.orderRepository.findById(order_id);
 
     if (orderExists) {
+      // #TODO
       //send message to rabbitmq to process payment
       const totalPrice = orderExists.total;
       const order_id = orderExists.id;
