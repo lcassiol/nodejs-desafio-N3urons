@@ -39,13 +39,14 @@ Com as seguintes regras:
   - Categorias de produtos `Adventure`, `Science`, `Romance`.
   - E os status dos pedidos `Processing`, `Waiting Payment`, `Finished`, `Cancelled`.
 - O sistema desenvolvido foi feito para que exista um usuário do tipo vendedor, onde ele pode **cadastrar um cliente e realizar uma compra para o mesmo, cadastrar produtos, listar clientes, verificar o estoque, atualizar o estoque**. Na listagem dos pedidos um usuário do tipo vendedor tambem só pode ver os pedidos realizados por ele, bem como cancelar seus pedidos. 
-- Um usuário do tipo cliente tambem pode realizar o cadastro, o fluxo seria **criar um usuário,criar um cliente, ao criar um cliente com um usuário que não seja do tipo vendedor o usuário vai ficar associado ao cliente** assim a realização das compras podem ser feitas com toda as entidades preenchidas.
+- É possivel ter um usuário do tipo cliente, basta **criar um usuário, realizar login com o novo usuário, criar um cliente, ao criar um cliente com um usuário que não seja do tipo vendedor o usuário vai ficar associado ao cliente** assim a realização das compras podem ser feitas com toda as entidades preenchidas.
 
 
 ## ♻ Fluxo do sistema
+- Login como vendedor, Cadastrar produto, cadastrar estoque para o produto
 - Cria-se um usuário, realiza login, lista produtos, cria um cliente, cria o pedido
 - :exclamation: Ao criar um pedido os dados do pedido serão salvos no postgres, é necessário realizar uma chamada para o endpoint de pagamento informando o pedido e os dados para pagamento como no exemplo de requisição anexo do insomnia.
-- :exclamation: Ao realizar a chamada para o endpoint de pagamento o sistema cria uma mensagem e envia para o RabbitMQ, assim que o (projeto consumer)[https://github.com/lcassiol/nodejs-consumer-desafio-n3urons] for iniciado ele vai consumir a mensagem enviada, retirar os dados importantes do pedido e então persistir os dados no MongoDB, e então responder novamente para o RabbitMQ informando que o pedido foi pago.
+- :exclamation: Ao realizar a chamada para o endpoint de pagamento o sistema cria uma mensagem e envia para o RabbitMQ, assim que o [projeto consumer](https://github.com/lcassiol/nodejs-consumer-desafio-n3urons) for iniciado ele vai consumir a mensagem enviada, retirar os dados importantes do pedido e então persistir os dados no MongoDB, e então responder novamente para o RabbitMQ informando que o pedido foi pago.
 - :exclamation: Ao receber a confirmação de pagamento do pedido o sistema vai alterar o status do pedido para finalizado e então enviar um email para o email do cliente da compra.
 
 
