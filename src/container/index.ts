@@ -27,6 +27,9 @@ import ProductCategoryRepository from '../repositories/ProductCategoryRepository
 import ISubsidiaryRepository from '../interfaces/ISubsidiaryRepository';
 import SubsidiaryRepository from '../repositories/SubsidiaryRepository';
 
+import ISendEmail from '../interfaces/ISendMail';
+import SendEmail from '../services/SendMailService';
+
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 
 container.registerSingleton<IOrderRepository>(
@@ -68,3 +71,5 @@ container.registerSingleton<ISubsidiaryRepository>(
   'SubsidiaryRepository',
   SubsidiaryRepository,
 );
+
+container.registerSingleton<ISendEmail>('SendMailService', SendEmail);
