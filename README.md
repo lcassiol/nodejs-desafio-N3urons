@@ -43,7 +43,10 @@ Com as seguintes regras:
 
 
 ## ♻ Fluxo do sistema
-- Usuario realiza login na aplicação, cria um cliente, lista produtos, seleciona os produtos e realiza a criação de um novo pedido, realiza chamada para pagamento do pedido.
+- Cria-se um usuário, realiza login, lista produtos, cria um cliente, cria o pedido
+- :exclamation: Ao criar um pedido os dados do pedido serão salvos no postgres, é necessário realizar uma chamada para o endpoint de pagamento informando o pedido e os dados para pagamento como no exemplo de requisição anexo do insomnia.
+- :exclamation: Ao realizar a chamada para o endpoint de pagamento o sistema cria uma mensagem e envia para o RabbitMQ, assim que o (projeto consumer)[https://github.com/lcassiol/nodejs-consumer-desafio-n3urons] for iniciado ele vai consumir a mensagem enviada, retirar os dados importantes do pedido e então persistir os dados no MongoDB, e então responder novamente para o RabbitMQ informando que o pedido foi pago.
+- :exclamation: Ao receber a confirmação de pagamento do pedido o sistema vai alterar o status do pedido para finalizado e então enviar um email para o email do cliente da compra.
 
 
 ## ▶️ Para rodar o projeto:
