@@ -55,7 +55,7 @@ class ConfirmPaymentService {
         '\n',
     );
     const body =
-      `Olá o pagamento da sua compra foi realizado com sucesso \n-----------------------------\nProdutos:\n` +
+      `Olá ${order.client.name} o pagamento da sua compra foi realizado com sucesso \n-----------------------------\nProdutos:\n` +
       products.join('') +
       '\n-----------------------------\nTOTAL R$ ' +
       order.total;
