@@ -28,9 +28,11 @@ Com as seguintes regras:
 - [Eslint](https://github.com/eslint/eslint)
 - [Prettier](https://github.com/prettier/prettier)
 - [EditorConfig](https://github.com/editorconfig/editorconfig-vscode)
+- [Nodemailer](https://github.com/nodemailer/nodemailer)
 
 ## 📦 Utilização
 
+- O sistema possui um envio de email quando o pagamento for confirmado, é necessário configurar o smtp e as credenciais no arquivo `/src/config/mail.ts`, sugestão para criar conta e testar ambiente de desenvolvimento: [MailTrap](https://mailtrap.io)
 - Ao finalizar a migração alguns dados ja foram criados: 
   - Filial `Recife I` ja vai existir. 
   - Um usuário do tipo vendedor, login `seller1` password `cassio123`.
