@@ -1,7 +1,7 @@
 import { Transporter } from 'nodemailer';
 import * as nodemailer from 'nodemailer';
-import mailConfig from '../config/mail';
-import ISendMail from '../interfaces/ISendMail';
+import mailConfig from '../../config/mail';
+import ISendMail from '../../interfaces/ISendMail';
 
 interface MailProps {
   to: string;
@@ -34,8 +34,6 @@ class Mail implements ISendMail {
       subject,
       text: body,
     });
-
-    console.log(response);
   }
 }
 

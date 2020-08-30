@@ -1,10 +1,10 @@
 import { injectable, inject } from 'tsyringe';
 
-import RabbitMQConfig from '../config/rabbitmq';
+import MessageQueueConfig from '../config/queue';
 
 import IOrderRepository from '../interfaces/IOrderRepository';
 import IOrderStatusRepository from '../interfaces/IOrderStatusRepository';
-import RabbitMQServer from '../queue/RabbitMQServer';
+import IQueueServer from '../interfaces/IQueueServer';
 
 interface IRequest {
   order_id: number;
@@ -20,6 +20,9 @@ class PayOrderService {
 
     @inject('OrderStatusRepository')
     private orderStatusRepository: IOrderStatusRepository,
+
+    @inject('QueueServer')
+    private queueServer: IQueueServer,
   ) {}
 
   public async execute({
@@ -44,10 +47,10 @@ class PayOrderService {
         card_number,
         card_validate,
       };
-      const server = new RabbitMQServer(RabbitMQConfig.url);
-      await server.start();
-      await server.publishInQueue(
-        RabbitMQConfig.producerQueue,
+
+      await this.queueServer.start(MessageQueueConfig.url);
+      await this.queueServer.publishInQueue(
+        MessageQueueConfig.producerQueue,
         JSON.stringify(message),
       );
 

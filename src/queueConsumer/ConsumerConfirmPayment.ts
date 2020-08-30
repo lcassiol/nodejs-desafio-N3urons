@@ -1,13 +1,13 @@
 import { container } from 'tsyringe';
 
-import RabbitMQConfig from '../config/rabbitmq';
-import RabbitMQServer from './RabbitMQServer';
+import MessageQueueConfig from '../config/queue';
 import ConfirmPaymentService from '../services/ConfirmPaymentService';
+import RabbitMQServer from '../utils/RabbitMQ/RabbitMQServer';
 
 const consumer = async () => {
-  const server = new RabbitMQServer(RabbitMQConfig.url);
-  await server.start();
-  await server.consume(RabbitMQConfig.consumeQueue, async message => {
+  const server = container.resolve(RabbitMQServer);
+  await server.start(MessageQueueConfig.url);
+  await server.consume(MessageQueueConfig.consumeQueue, async message => {
     const confirmPaymentService = container.resolve(ConfirmPaymentService);
     const orderId = Number(message.content.toString());
     await confirmPaymentService.execute(orderId);

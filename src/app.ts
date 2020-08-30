@@ -4,7 +4,7 @@ import 'express-async-errors';
 import 'reflect-metadata';
 
 import * as cors from 'cors';
-import Consumer from './queue/ConsumerConfirmPayment';
+import Consumer from './queueConsumer/ConsumerConfirmPayment';
 import routes from './routes';
 import AppError from './errors/AppError';
 

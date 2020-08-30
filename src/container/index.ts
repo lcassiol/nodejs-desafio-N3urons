@@ -27,8 +27,11 @@ import ProductCategoryRepository from '../repositories/ProductCategoryRepository
 import ISubsidiaryRepository from '../interfaces/ISubsidiaryRepository';
 import SubsidiaryRepository from '../repositories/SubsidiaryRepository';
 
-import ISendEmail from '../interfaces/ISendMail';
-import SendEmail from '../services/SendMailService';
+import ISendMail from '../interfaces/ISendMail';
+import SendMail from '../utils/SendMail/SendMailService';
+
+import IQueueServer from '../interfaces/IQueueServer';
+import RabbitMQServer from '../utils/RabbitMQ/RabbitMQServer';
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 
@@ -72,4 +75,6 @@ container.registerSingleton<ISubsidiaryRepository>(
   SubsidiaryRepository,
 );
 
-container.registerSingleton<ISendEmail>('SendMailService', SendEmail);
+container.registerSingleton<ISendMail>('SendMailService', SendMail);
+
+container.registerSingleton<IQueueServer>('QueueServer', RabbitMQServer);
