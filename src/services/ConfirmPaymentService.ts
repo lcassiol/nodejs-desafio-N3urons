@@ -40,10 +40,26 @@ class ConfirmPaymentService {
       status: findOrderStatus,
     });
 
-    console.log(order);
     const clientEmail = order.client.email;
     const subject = `${order.id} Pagamento Confirmado`;
-    const body = `Olá o pagamento da sua compra ${order.id} foi realizado com sucesso`;
+    const products = order.order_products.map(
+      ODproduct =>
+        'Nome: ' +
+        ODproduct.product.name +
+        'Descrição: ' +
+        ODproduct.product.description +
+        ' -- Qtd: ' +
+        ODproduct.quantity +
+        ' -- R$ ' +
+        (ODproduct.quantity * ODproduct.product.price).toFixed(2) +
+        '\n',
+    );
+    const body =
+      `Olá o pagamento da sua compra foi realizado com sucesso \n-----------------------------\nProdutos:\n` +
+      products.join('') +
+      '\n-----------------------------\nTOTAL R$ ' +
+      order.total;
+
     await this.sendMailService.sendMail({ to: clientEmail, subject, body });
 
     await this.orderRepository.update(updatedOrder);

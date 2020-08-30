@@ -57,7 +57,7 @@ class OrderRepository implements IOrderRepository {
       where: {
         id,
       },
-      relations: ['client'],
+      relations: ['client', 'order_products'],
     });
 
     return order;
