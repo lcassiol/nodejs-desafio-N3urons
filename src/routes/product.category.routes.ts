@@ -1,16 +1,11 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 
-import ListProductCategory from '../services/ListProductCategoryService';
+import ProductCategoryController from '../controllers/ProductCategoryController';
 
 const productCategoryRouter = Router();
+const productCategoryController = new ProductCategoryController();
 
-productCategoryRouter.get('/', async (request, response) => {
-  const listProductCategory = container.resolve(ListProductCategory);
-
-  const categories = await listProductCategory.execute();
-
-  return response.json(categories);
-});
+productCategoryRouter.get('/', productCategoryController.index);
 
 export default productCategoryRouter;
