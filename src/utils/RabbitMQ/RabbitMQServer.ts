@@ -1,5 +1,6 @@
 import { Connection, Channel, connect, Message, Replies } from 'amqplib';
 import IQueueServer from '../../interfaces/IQueueServer';
+import MessageQueueConfig from '../../config/queue';
 
 export default class RabbitMQServer implements IQueueServer {
   private conn: Connection;
@@ -8,6 +9,8 @@ export default class RabbitMQServer implements IQueueServer {
   public async start(uri: string): Promise<void> {
     this.conn = await connect(uri);
     this.channel = await this.conn.createChannel();
+    this.channel.assertQueue(MessageQueueConfig.producerQueue);
+    this.channel.assertQueue(MessageQueueConfig.consumeQueue);
   }
 
   public async publishInQueue(
