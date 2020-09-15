@@ -1,4 +1,6 @@
 import { Router, Request, Response } from 'express';
+import * as swaggerUi from 'swagger-ui-express';
+import * as specs from '../swagger';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import ensureSellerUser from '../middlewares/ensureSellerUser';
@@ -14,6 +16,8 @@ import paymentRouter from './payment.routes';
 
 const routes = Router();
 
+routes.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 routes.use('/sessions', sessionsRouter);
 routes.use('/users', usersRouter);
 
@@ -22,6 +26,7 @@ routes.use(ensureAuthenticated);
 routes.use('/orders', ordersRouter);
 routes.use('/products', productsRouter);
 routes.use('/products/categories', productCategoryRouter);
+
 routes.use('/clients', clientsRouter);
 routes.use('/payment', paymentRouter);
 
